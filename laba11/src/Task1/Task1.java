@@ -1,7 +1,9 @@
+package Task1;
+
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-// Головний клас файлу (обов'язково має збігатися з назвою файлу Task1.java)
+// Головний клас файлу (обов'язково має збігатися з назвою файлу Task1.Task1.java)
 public class Task1 {
 
     public static void runDemo() {
@@ -11,7 +13,7 @@ public class Task1 {
         BankTerminalApi bankTerminal = new BankTerminalApi("POS-01");
         IPaymentProcessor adapter = new BankTerminalAdapter(bankTerminal);
 
-        // Каса працює виключно з інтерфейсом IPaymentProcessor
+        // Каса працює виключно з інтерфейсом Task1.IPaymentProcessor
         CinemaCashDesk cashDesk = new CinemaCashDesk("Каса №1", adapter);
 
         // Сценарій 1: Успішна оплата квитка на 180 грн
@@ -69,16 +71,16 @@ class BankTerminalApi {
 
     // Несумісний метод: приймає копійки і повертає числовий код
     public int makeTransaction(int amountInKopecks) {
-        EventLogger.log("BankTerminalApi:" + terminalId, "Отримано запит на списання: " + amountInKopecks + " коп.");
+        EventLogger.log("Task1.BankTerminalApi:" + terminalId, "Отримано запит на списання: " + amountInKopecks + " коп.");
 
         if (simulateDecline) {
             int errorCode = 101;
-            EventLogger.log("BankTerminalApi:" + terminalId, "Транзакцію відхилено. Код відповіді терміналу: " + errorCode);
+            EventLogger.log("Task1.BankTerminalApi:" + terminalId, "Транзакцію відхилено. Код відповіді терміналу: " + errorCode);
             return errorCode;
         }
 
         int successCode = 0;
-        EventLogger.log("BankTerminalApi:" + terminalId, "Транзакцію виконано. Код відповіді терміналу: " + successCode);
+        EventLogger.log("Task1.BankTerminalApi:" + terminalId, "Транзакцію виконано. Код відповіді терміналу: " + successCode);
         return successCode;
     }
 }
@@ -93,7 +95,7 @@ class BankTerminalAdapter implements IPaymentProcessor {
 
     @Override
     public PaymentResult processPayment(double amountInUah) {
-        EventLogger.log("BankTerminalAdapter", "Перетворення суми " + amountInUah + " грн у копійки...");
+        EventLogger.log("Task1.BankTerminalAdapter", "Перетворення суми " + amountInUah + " грн у копійки...");
 
         // Конвертуємо гривні в копійки
         int kopecks = (int) Math.round(amountInUah * 100);
@@ -103,7 +105,7 @@ class BankTerminalAdapter implements IPaymentProcessor {
 
         // Перекладаємо код відповіді у зрозумілий для каси формат
         PaymentResult result = mapResponseCode(responseCode);
-        EventLogger.log("BankTerminalAdapter", "Код " + responseCode + " перетворено у відповідь каси: " + result);
+        EventLogger.log("Task1.BankTerminalAdapter", "Код " + responseCode + " перетворено у відповідь каси: " + result);
 
         return result;
     }
