@@ -1,0 +1,48 @@
+classDiagram
+    direction TB
+
+    class Session {
+        <<interface>>
+        +getDescription() String
+        +getPrice() double
+    }
+
+    class BaseSession {
+        -String movieTitle
+        -double basePrice
+        +BaseSession(movieTitle: String, basePrice: double)
+        +getDescription() String
+        +getPrice() double
+    }
+
+    class SessionDecorator {
+        #Session wrappedSession
+        +SessionDecorator(Session session)
+        +getDescription() String
+        +getPrice() double
+    }
+
+    class ThreeDDecorator {
+        +ThreeDDecorator(Session session)
+        +getDescription() String
+        +getPrice() double
+    }
+
+    class SubtitlesDecorator {
+        +SubtitlesDecorator(Session session)
+        +getDescription() String
+        +getPrice() double
+    }
+
+    class WeekendDiscountDecorator {
+        +WeekendDiscountDecorator(Session session)
+        +getDescription() String
+        +getPrice() double
+    }
+
+    Session <|.. BaseSession : implements
+    Session <|.. SessionDecorator : implements
+    SessionDecorator o-- Session : wraps
+    SessionDecorator <|-- ThreeDDecorator : extends
+    SessionDecorator <|-- SubtitlesDecorator : extends
+    SessionDecorator <|-- WeekendDiscountDecorator : extends

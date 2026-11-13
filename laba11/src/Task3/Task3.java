@@ -1,4 +1,4 @@
-package laba11.Task3;
+package Task3;
 
 // 1. Базовий інтерфейс (Component)
 interface Session {
