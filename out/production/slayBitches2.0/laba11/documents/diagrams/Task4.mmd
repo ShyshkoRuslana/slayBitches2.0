@@ -1,0 +1,53 @@
+classDiagram
+    direction TB
+
+    class CinemaFacade {
+        - MovieLoader movieLoader
+        - Projector projector
+        - SoundSystem soundSystem
+        - LightingSystem lightingSystem
+        - TicketSales ticketSales
+        - AdvertisingSystem advertisingSystem
+        + CinemaFacade()
+        + prepareShow() void
+        + getLightingSystem() LightingSystem
+    }
+
+    class MovieLoader {
+        + load() void
+    }
+
+    class Projector {
+        + configure() void
+    }
+
+    class SoundSystem {
+        + configure() void
+    }
+
+    class LightingSystem {
+        + turnOn() void
+        + turnOff() void
+    }
+
+    class TicketSales {
+        + open() void
+    }
+
+    class AdvertisingSystem {
+        + enable() void
+    }
+
+    class Main {
+        + main(String[] args) void
+    }
+
+    CinemaFacade *-- MovieLoader : володіє
+    CinemaFacade *-- Projector : володіє
+    CinemaFacade *-- SoundSystem : володіє
+    CinemaFacade *-- LightingSystem : володіє
+    CinemaFacade *-- TicketSales : володіє
+    CinemaFacade *-- AdvertisingSystem : володіє
+
+    Main ..> CinemaFacade : викликає prepareShow
+    Main ..> LightingSystem : окремий доступ (аварія)
