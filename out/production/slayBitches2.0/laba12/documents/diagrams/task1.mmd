@@ -1,0 +1,57 @@
+classDiagram
+    direction TB
+
+    class FestivalComponent {
+        <<interface>>
+        <<Component>>
+        +getName() String
+        +getDuration() int
+        +getMovieCount() int
+        +printTree(indent: String) void
+    }
+
+    class Movie {
+        <<Leaf>>
+        -String title
+        -int durationMinutes
+        +Movie(title: String, durationMinutes: int)
+        +getName() String
+        +getDuration() int
+        +getMovieCount() int
+        +printTree(indent: String) void
+    }
+
+    class ProgramGroup {
+        <<Composite>>
+        -String groupType
+        -String name
+        -List~FestivalComponent~ children
+        +ProgramGroup(groupType: String, name: String)
+        +add(component: FestivalComponent) void
+        +remove(component: FestivalComponent) void
+        +getName() String
+        +getDuration() int
+        +getMovieCount() int
+        +printTree(indent: String) void
+    }
+
+    class Main {
+        <<Client>>
+        -printNodeSummary(node: FestivalComponent)$ void
+        +main(args: String[])$ void
+    }
+
+    class EventLogger {
+        -DateTimeFormatter TIME_FMT$
+        +log(source: String, event: String)$ void
+    }
+
+    FestivalComponent <|.. Movie : implements
+    FestivalComponent <|.. ProgramGroup : implements
+    ProgramGroup o--> "0..*" FestivalComponent : children
+    Main ..> FestivalComponent : uses
+    Main ..> ProgramGroup : creates
+    Main ..> Movie : creates
+    Movie ..> EventLogger : logs
+    ProgramGroup ..> EventLogger : logs
+    Main ..> EventLogger : logs
