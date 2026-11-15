@@ -1,0 +1,44 @@
+classDiagram
+    class Task1.CinemaCashDesk {
+        <<Client>>
+        -String deskName
+        -Task1.IPaymentProcessor paymentProcessor
+        +Task1.CinemaCashDesk(String deskName, Task1.IPaymentProcessor processor)
+        +setPaymentProcessor(Task1.IPaymentProcessor processor) void
+        +sellTicket(String movieTitle, double priceUah) void
+    }
+
+    class Task1.IPaymentProcessor {
+        <<Target Interface>>
+        +processPayment(double amountInUah)* Task1.PaymentResult
+    }
+
+    class Task1.PaymentResult {
+        <<Data Transfer Object>>
+        -boolean isSuccess
+        -String message
+        +isSuccess() boolean
+        +message() String
+    }
+
+    class Task1.BankTerminalAdapter {
+        <<Adapter>>
+        -Task1.BankTerminalApi terminal
+        +Task1.BankTerminalAdapter(Task1.BankTerminalApi terminal)
+        +processPayment(double amountInUah) Task1.PaymentResult
+        -mapResponseCode(int code) Task1.PaymentResult
+    }
+
+    class Task1.BankTerminalApi {
+        <<Adaptee>>
+        -String terminalId
+        -boolean simulateDecline
+        +Task1.BankTerminalApi(String terminalId)
+        +setSimulateDecline(boolean simulateDecline) void
+        +makeTransaction(int amountInKopecks) int
+    }
+
+    Task1.CinemaCashDesk "1" --> "1" Task1.IPaymentProcessor : uses
+    Task1.BankTerminalAdapter ..|> Task1.IPaymentProcessor : implements
+    Task1.BankTerminalAdapter "1" o-- "1" Task1.BankTerminalApi : wraps
+    Task1.IPaymentProcessor ..> Task1.PaymentResult : returns

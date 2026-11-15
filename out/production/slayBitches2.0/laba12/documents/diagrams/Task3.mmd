@@ -1,0 +1,81 @@
+classDiagram
+    direction TB
+
+    class Task3 {
+        <<Client>>
+        +main(args: String[])$ void
+    }
+
+    class Advertisement {
+<<Abstract / Abstraction>>
+#medium: DisplayMedium
++Advertisement(medium: DisplayMedium)
++setMedium(medium: DisplayMedium) void
++show()* void
+}
+
+class TrailerAd {
+<<RefinedAbstraction>>
+-movieTitle: String
+-releaseDate: String
++TrailerAd(medium: DisplayMedium, movieTitle: String, releaseDate: String)
++show() void
+}
+
+class PartnerAd {
+<<RefinedAbstraction>>
+-partnerName: String
+-offer: String
++PartnerAd(medium: DisplayMedium, partnerName: String, offer: String)
++show() void
+}
+
+class SocialAd {
+<<RefinedAbstraction>>
+-campaignTopic: String
++SocialAd(medium: DisplayMedium, campaignTopic: String)
++show() void
+}
+
+class DisplayMedium {
+<<Interface / Implementor>>
++renderAd(adType: String, content: String, durationSeconds: int) void
+}
+
+class HallScreen {
+<<ConcreteImplementor>>
++renderAd(adType: String, content: String, durationSeconds: int) void
+}
+
+class LobbyScreens {
+<<ConcreteImplementor>>
++renderAd(adType: String, content: String, durationSeconds: int) void
+}
+
+class MobileApp {
+<<ConcreteImplementor>>
++renderAd(adType: String, content: String, durationSeconds: int) void
+}
+
+class LedFacade {
+<<ConcreteImplementor>>
++renderAd(adType: String, content: String, durationSeconds: int) void
+}
+
+%% Міст: агрегація між Абстракцією та Реалізацією
+Advertisement "0..*" o--> "1" DisplayMedium : medium (Bridge)
+
+%% Успадкування (Generalization) уточнених абстракцій
+Advertisement <|-- TrailerAd
+Advertisement <|-- PartnerAd
+Advertisement <|-- SocialAd
+
+%% Реалізація (Realization) інтерфейсу носіїв
+DisplayMedium <|.. HallScreen
+DisplayMedium <|.. LobbyScreens
+DisplayMedium <|.. MobileApp
+DisplayMedium <|.. LedFacade
+
+%% Залежності клієнта (Dependency)
+Task3 ..> Advertisement : uses
+Task3 ..> DisplayMedium : injects
