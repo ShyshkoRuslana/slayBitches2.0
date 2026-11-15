@@ -1,0 +1,91 @@
+classDiagram
+    class HallOperatorPanel {
+        <<Invoker>>
+        -Stack~Command~ history
+        -List~String~ auditLog
+        +executeCommand(Command command) void
+        +undoLastCommand() void
+        +printCommandJournal() void
+    }
+
+    class Command {
+        <<interface>>
+        <<Command>>
+        +execute() void
+        +undo() void
+        +getDescription() String
+    }
+
+    class MacroCommand {
+        <<ConcreteCommand>>
+        -String macroName
+        -List~Command~ commands
+        +execute() void
+        +undo() void
+        +getDescription() String
+    }
+
+    class LightCommand {
+        <<ConcreteCommand>>
+        -CinemaHall hall
+        -boolean targetState
+        -boolean previousState
+        +execute() void
+        +undo() void
+        +getDescription() String
+    }
+
+    class VolumeCommand {
+        <<ConcreteCommand>>
+        -CinemaHall hall
+        -int newVolume
+        -int previousVolume
+        +execute() void
+        +undo() void
+        +getDescription() String
+    }
+
+    class PauseCommand {
+        <<ConcreteCommand>>
+        -CinemaHall hall
+        -boolean pauseState
+        -boolean previousState
+        +execute() void
+        +undo() void
+        +getDescription() String
+    }
+
+    class AdCommand {
+        <<ConcreteCommand>>
+        -CinemaHall hall
+        -boolean playAds
+        -boolean previousState
+        +execute() void
+        +undo() void
+        +getDescription() String
+    }
+
+    class CinemaHall {
+        <<Receiver>>
+        -String hallName
+        -boolean lightsOn
+        -int volume
+        -boolean isPaused
+        -boolean adsPlaying
+        +setLights(boolean on) void
+        +setVolume(int newVolume) void
+        +setPaused(boolean paused) void
+        +setAdsPlaying(boolean playing) void
+    }
+
+    HallOperatorPanel o--> "0..*" Command : history
+    Command <|.. MacroCommand
+    Command <|.. LightCommand
+    Command <|.. VolumeCommand
+    Command <|.. PauseCommand
+    Command <|.. AdCommand
+    MacroCommand o--> "1..*" Command : commands
+    LightCommand --> "1" CinemaHall : hall
+    VolumeCommand --> "1" CinemaHall : hall
+    PauseCommand --> "1" CinemaHall : hall
+    AdCommand --> "1" CinemaHall : hall
