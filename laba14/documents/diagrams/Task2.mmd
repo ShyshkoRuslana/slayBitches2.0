@@ -1,0 +1,69 @@
+classDiagram
+    direction TB
+
+    class EventType {
+        <<enumeration>>
+        +PREMIERE_OPENED$
+        +RESCHEDULED$
+        +CANCELLED$
+    }
+
+    class Observer {
+        <<interface>>
+        +update(sessionTitle: String, event: EventType, details: String) void
+    }
+
+    class Session {
+        <<Subject>>
+        -title: String
+        -dateTime: String
+        -observers: List~Observer~
+        +Session(title: String, dateTime: String)
+        +subscribe(observer: Observer) void
+        +unsubscribe(observer: Observer) void
+        -notifyObservers(event: EventType, details: String) void
+        +openPremiereSales() void
+        +reschedule(newDateTime: String) void
+        +cancel() void
+    }
+
+    class Website {
+        <<ConcreteObserver>>
+        +update(sessionTitle: String, event: EventType, details: String) void
+    }
+
+    class MobileApp {
+        <<ConcreteObserver>>
+        +update(sessionTitle: String, event: EventType, details: String) void
+    }
+
+    class Viewer {
+        <<ConcreteObserver>>
+        -name: String
+        -hasTicket: boolean
+        +Viewer(name: String)
+        +buyTicket() void
+        +update(sessionTitle: String, event: EventType, details: String) void
+    }
+
+    class Main {
+        <<Client>>
+        +main(args: String[]) void$
+    }
+
+Session "1" o--> "0..*" Observer : -observers
+Session ..> EventType : «use»
+Observer ..> EventType : «use»
+Observer <|.. Website : implements
+Observer <|.. MobileApp : implements
+Observer <|.. Viewer : implements
+Main ..> Session : «create»
+Main ..> Website : «create»
+Main ..> MobileApp : «create»
+Main ..> Viewer : «create»
+
+note for Session "Роль: Subject (Видавець) — зберігає підписників та сповіщає про зміни"
+note for Observer "Роль: Observer (Спостерігач) — єдиний контракт для всіх отримувачів"
+note for Viewer "Роль: ConcreteObserver — кожен отримувач сам вирішує, як реагувати"
+note for EventType "Роль: Event (Подія) — перелік типів змін сеансу"
+note for Main "Роль: Client — ініціалізує об'єкти та запускає сценарій"
