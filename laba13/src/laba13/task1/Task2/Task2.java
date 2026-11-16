@@ -2,7 +2,9 @@ package laba13.task1.Task2;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*Крихкість коду
+Складна умовна логіка
+Ланцюжок обов'язків)*/
 // 1. Клас замовлення
 class Order {
     private double originalPrice;
@@ -66,7 +68,7 @@ class PromoCodeHandler implements DiscountHandler {
             order.setCurrentPrice(newPrice);
             order.addDiscountLog("Знижка за промокодом (30%)");
             System.out.println("-> Промокод застосовано. Подальші правила заблоковано.");
-            return; // Зупиняємо ланцюжок!
+            return;
         }
 
         // Якщо промокоду немає, передаємо замовлення далі

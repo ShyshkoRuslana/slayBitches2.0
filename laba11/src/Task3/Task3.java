@@ -1,5 +1,6 @@
 package Task3;
-
+/*Вибух класів
+декоратор */
 // 1. Базовий інтерфейс (Component)
 interface Session {
     String getDescription();
