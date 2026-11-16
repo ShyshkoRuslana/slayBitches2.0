@@ -1,0 +1,62 @@
+classDiagram
+    direction LR
+
+    class Order {
+        - double originalPrice
+        - double currentPrice
+        - boolean hasPromoCode
+        - boolean isStudent
+        - boolean isBirthday
+        - boolean isPensioner
+        - List~String~ appliedDiscounts
+        + Order(double, boolean, boolean, boolean, boolean)
+        + double getOriginalPrice()
+        + double getCurrentPrice()
+        + void setCurrentPrice(double)
+        + boolean hasPromoCode()
+        + boolean isStudent()
+        + boolean isBirthday()
+        + boolean isPensioner()
+        + void addDiscountLog(String)
+        + void printResult()
+    }
+
+    class DiscountHandler {
+        <<interface>>
+        + setNext(DiscountHandler nextHandler)
+        + handle(Order order)
+    }
+
+    class PromoCodeHandler {
+        - DiscountHandler nextHandler
+        + setNext(DiscountHandler nextHandler)
+        + handle(Order order)
+    }
+
+    class StudentDiscountHandler {
+        - DiscountHandler nextHandler
+        + setNext(DiscountHandler nextHandler)
+        + handle(Order order)
+    }
+
+    class PensionerDiscountHandler {
+        - DiscountHandler nextHandler
+        + setNext(DiscountHandler nextHandler)
+        + handle(Order order)
+    }
+
+    class Task2 {
+        + main(String[] args)$
+    }
+
+    DiscountHandler <|.. PromoCodeHandler : <<realization>>
+    DiscountHandler <|.. StudentDiscountHandler : <<realization>>
+    DiscountHandler <|.. PensionerDiscountHandler : <<realization>>
+
+    DiscountHandler --> DiscountHandler : nextHandler (асоціація)
+    PromoCodeHandler --> Order : використовує (залежність)
+    StudentDiscountHandler --> Order : використовує (залежність)
+    PensionerDispatchHandler --> Order : використовує (залежність)
+
+    Task2 ..> Order : створює
+    Task2 ..> DiscountHandler : конфігурує ланцюжок

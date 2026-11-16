@@ -1,0 +1,49 @@
+classDiagram
+    class MoviePosterPage {
+        <<Client>>
+        -List~ITrailer~ trailers
+        +addTrailer(ITrailer trailer) void
+        +showAllTitles() void
+        +watchTrailer(int index, Viewer viewer) void
+    }
+
+    class ITrailer {
+        <<Subject Interface>>
+        +getMovieTitle()* String
+        +play(Viewer viewer)* void
+    }
+
+    class TrailerProxy {
+        <<Proxy>>
+        -String movieTitle
+        -String fileName
+        -boolean isRestricted18Plus
+        -RealTrailer realTrailer
+        +TrailerProxy(String title, String file, boolean is18Plus)
+        +getMovieTitle() String
+        +play(Viewer viewer) void
+    }
+
+    class RealTrailer {
+        <<RealSubject>>
+        -String movieTitle
+        -String fileName
+        +RealTrailer(String movieTitle, String fileName)
+        -loadFromStorage() void
+        +getMovieTitle() String
+        +play(Viewer viewer) void
+    }
+
+    class Viewer {
+        <<Data Transfer Object>>
+        -String name
+        -boolean isAdultVerified
+        +name() String
+        +isAdultVerified() boolean
+    }
+
+    MoviePosterPage "1" o-- "*" ITrailer : displays
+    TrailerProxy ..|> ITrailer : implements
+    RealTrailer ..|> ITrailer : implements
+    TrailerProxy "1" --> "0..1" RealTrailer : lazy creates & delegates
+    ITrailer ..> Viewer : checks/plays for
