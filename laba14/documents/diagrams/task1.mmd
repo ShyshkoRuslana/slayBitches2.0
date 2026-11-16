@@ -1,0 +1,103 @@
+classDiagram
+    direction TB
+
+    class OrderFormMediator {
+        <<interface>>
+        <<Mediator>>
+        +notify(sender: FormComponent, event: String) void
+    }
+
+    class FormComponent {
+        <<abstract>>
+        <<Colleague>>
+        #mediator: OrderFormMediator
+        #name: String
+        +FormComponent(mediator: OrderFormMediator, name: String)
+        +getName() String
+    }
+
+    class CheckoutFormCoordinator {
+        <<ConcreteMediator>>
+        -eventHandlers: Map~String, Runnable~
+        +registerHandler(event: String, action: Runnable) void
+        +notify(sender: FormComponent, event: String) void
+    }
+
+    class SessionSelector {
+        <<ConcreteColleague>>
+        -sessionType: String
+        -movieTitle: String
+        +SessionSelector(mediator: OrderFormMediator)
+        +selectSession(movieTitle: String, type: String) void
+        +getSessionType() String
+        +getMovieTitle() String
+    }
+
+    class SeatMap {
+        <<ConcreteColleague>>
+        -selectedSeats: List~String~
+        +SeatMap(mediator: OrderFormMediator)
+        +selectSeats(seats: List~String~) void
+        +resetSeats() void
+        +getSelectedCount() int
+    }
+
+    class TicketCounter {
+        <<ConcreteColleague>>
+        -count: int
+        +TicketCounter(mediator: OrderFormMediator)
+        +updateCount(count: int) void
+        +getCount() int
+    }
+
+    class Glasses3DToggle {
+        <<ConcreteColleague>>
+        -visible: boolean
+        -checked: boolean
+        +Glasses3DToggle(mediator: OrderFormMediator)
+        +setVisible(visible: boolean) void
+        +toggle(state: boolean) void
+    }
+
+    class PromoCodeField {
+        <<ConcreteColleague>>
+        -promoCode: String
+        +PromoCodeField(mediator: OrderFormMediator)
+        +enterPromoCode(code: String) void
+        +getPromoCode() String
+    }
+
+    class PayButton {
+        <<ConcreteColleague>>
+        -enabled: boolean
+        +PayButton(mediator: OrderFormMediator)
+        +setEnabled(enabled: boolean) void
+        +click() void
+    }
+
+    class DrinksSelector {
+        <<ConcreteColleague>>
+        -selectedDrink: String
+        +DrinksSelector(mediator: OrderFormMediator)
+        +selectDrink(drink: String) void
+        +getSelectedDrink() String
+    }
+
+    class EventLogger {
+        <<Utility>>
+        -minutes: int$
+        +log(source: String, message: String)$ void
+    }
+
+    OrderFormMediator <|.. CheckoutFormCoordinator : implements
+    FormComponent o--> "1" OrderFormMediator : mediator
+    FormComponent <|-- SessionSelector
+    FormComponent <|-- SeatMap
+    FormComponent <|-- TicketCounter
+    FormComponent <|-- Glasses3DToggle
+    FormComponent <|-- PromoCodeField
+    FormComponent <|-- PayButton
+    FormComponent <|-- DrinksSelector
+
+    FormComponent ..> EventLogger : logs
+    CheckoutFormCoordinator ..> EventLogger : logs
