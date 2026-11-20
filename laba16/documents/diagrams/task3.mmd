@@ -1,0 +1,49 @@
+classDiagram
+    direction TB
+
+    class Main {
+        <<Client>>
+        +main(args: String[])$ void
+    }
+
+    class HallEquipment {
+        <<Originator>>
+        -channelVolumes: Map~String, Integer~
+        -equalizer: Map~String, Integer~
+        -brightness: int
+        -contrast: int
+        +HallEquipment()
+        +setChannelVolume(channel: String, volume: int) void
+        +setEqualizerBand(band: String, level: int) void
+        +setProjection(brightness: int, contrast: int) void
+        +save() Memento
+        +restore(memento: Memento) void
+        +toString() String
+    }
+
+    class Memento["HallEquipment.Memento"] {
+<<interface / Memento>>
+}
+
+class Snapshot["HallEquipment.Snapshot"] {
+<<ConcreteMemento / private static>>
+-channelVolumes: Map~String, Integer~
+-equalizer: Map~String, Integer~
+-brightness: int
+-contrast: int
+-Snapshot(channelVolumes: Map~String, Integer~, equalizer: Map~String, Integer~, brightness: int, contrast: int)
+}
+
+class SettingsHistory {
+<<Caretaker>>
+-presets: Map~String, Memento~
++savePreset(name: String, memento: Memento) void
++getPreset(name: String) Memento
+}
+
+Snapshot ..|> Memento : реалізує
+HallEquipment ..> Snapshot : створює та читає
+HallEquipment ..> Memento : повертає / приймає
+SettingsHistory "1" o--> "0..*" Memento : зберігає пресети
+Main ..> HallEquipment : налаштовує
+Main ..> SettingsHistory : керує історією
