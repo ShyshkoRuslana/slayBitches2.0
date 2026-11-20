@@ -1,0 +1,112 @@
+classDiagram
+    direction TB
+
+    class OrderState {
+        <<interface>>
+        <<State>>
+        +getStateName() String
+        +changeSeats(order: TicketOrder, newSeats: List~String~) void
+        +reserve(order: TicketOrder) void
+        +pay(order: TicketOrder) void
+        +expireReservation(order: TicketOrder) void
+        +enterHall(order: TicketOrder) void
+        +refund(order: TicketOrder) void
+    }
+
+    class CartState {
+        <<ConcreteState>>
+        +getStateName() String
+        +changeSeats(order: TicketOrder, newSeats: List~String~) void
+        +reserve(order: TicketOrder) void
+        +pay(order: TicketOrder) void
+        +expireReservation(order: TicketOrder) void
+        +enterHall(order: TicketOrder) void
+        +refund(order: TicketOrder) void
+    }
+
+    class ReservedState {
+        <<ConcreteState>>
+        +getStateName() String
+        +changeSeats(order: TicketOrder, newSeats: List~String~) void
+        +reserve(order: TicketOrder) void
+        +pay(order: TicketOrder) void
+        +expireReservation(order: TicketOrder) void
+        +enterHall(order: TicketOrder) void
+        +refund(order: TicketOrder) void
+    }
+
+    class PaidState {
+        <<ConcreteState>>
+        +getStateName() String
+        +changeSeats(order: TicketOrder, newSeats: List~String~) void
+        +reserve(order: TicketOrder) void
+        +pay(order: TicketOrder) void
+        +expireReservation(order: TicketOrder) void
+        +enterHall(order: TicketOrder) void
+        +refund(order: TicketOrder) void
+    }
+
+    class UsedState {
+        <<ConcreteState>>
+        +getStateName() String
+        +changeSeats(order: TicketOrder, newSeats: List~String~) void
+        +reserve(order: TicketOrder) void
+        +pay(order: TicketOrder) void
+        +expireReservation(order: TicketOrder) void
+        +enterHall(order: TicketOrder) void
+        +refund(order: TicketOrder) void
+    }
+
+    class CancelledState {
+        <<ConcreteState>>
+        +getStateName() String
+        +changeSeats(order: TicketOrder, newSeats: List~String~) void
+        +reserve(order: TicketOrder) void
+        +pay(order: TicketOrder) void
+        +expireReservation(order: TicketOrder) void
+        +enterHall(order: TicketOrder) void
+        +refund(order: TicketOrder) void
+    }
+
+    class TicketOrder {
+        <<Context>>
+        -String id
+        -String movieTitle
+        -List~String~ seats
+        -OrderState state
+        +TicketOrder(id: String, movieTitle: String, initialSeats: List~String~)
+        +setState(newState: OrderState) void
+        +getId() String
+        +getSeats() List~String~
+        ~setSeatsInternal(newSeats: List~String~) void
+        +changeSeats(newSeats: List~String~) void
+        +reserve() void
+        +pay() void
+        +expireReservation() void
+        +enterHall() void
+        +refund() void
+    }
+
+    class EventLogger {
+        <<Utility>>
+        -int minutesOffset$
+        +log(source: String, event: String)$ void
+    }
+
+    class Task2 {
+        <<Client>>
+        +runTask2()$ void
+        +main(args: String[])$ void
+    }
+
+    OrderState <|.. CartState : implements
+    OrderState <|.. ReservedState : implements
+    OrderState <|.. PaidState : implements
+    OrderState <|.. UsedState : implements
+    OrderState <|.. CancelledState : implements
+
+    TicketOrder o--> "1" OrderState : current state
+    OrderState ..> TicketOrder : transitions state
+    TicketOrder ..> EventLogger : logs via
+    OrderState ..> EventLogger : logs via
+    Task2 ..> TicketOrder : executes scenario
