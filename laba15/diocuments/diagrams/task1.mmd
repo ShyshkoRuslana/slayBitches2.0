@@ -1,0 +1,74 @@
+classDiagram
+    direction TB
+
+    class PricingStrategy {
+        <<interface>>
+        <<Strategy>>
+        +getStrategyName() String
+        +calculatePrice(basePrice: double, occupancyRate: double, ticketCount: int) double
+    }
+
+    class StandardPricingStrategy {
+        <<ConcreteStrategy>>
+        +getStrategyName() String
+        +calculatePrice(basePrice: double, occupancyRate: double, ticketCount: int) double
+    }
+
+    class DynamicPricingStrategy {
+        <<ConcreteStrategy>>
+        +getStrategyName() String
+        +calculatePrice(basePrice: double, occupancyRate: double, ticketCount: int) double
+    }
+
+    class MorningPricingStrategy {
+        <<ConcreteStrategy>>
+        +getStrategyName() String
+        +calculatePrice(basePrice: double, occupancyRate: double, ticketCount: int) double
+    }
+
+    class CorporatePricingStrategy {
+        <<ConcreteStrategy>>
+        +getStrategyName() String
+        +calculatePrice(basePrice: double, occupancyRate: double, ticketCount: int) double
+    }
+
+    class PremierePricingStrategy {
+        <<ConcreteStrategy>>
+        +getStrategyName() String
+        +calculatePrice(basePrice: double, occupancyRate: double, ticketCount: int) double
+    }
+
+    class Session {
+        <<Context>>
+        -String movieTitle
+        -double basePrice
+        -double occupancyRate
+        -PricingStrategy pricingStrategy
+        +Session(movieTitle: String, basePrice: double, occupancyRate: double, initialStrategy: PricingStrategy)
+        +setPricingStrategy(newStrategy: PricingStrategy) void
+        +setOccupancyRate(occupancyRate: double) void
+        +calculateOrderCost(ticketCount: int) double
+    }
+
+    class EventLogger {
+        <<Utility>>
+        -int minutesOffset$
+        +log(source: String, event: String)$ void
+    }
+
+    class Task1 {
+        <<Client>>
+        +runTask1()$ void
+        +main(args: String[])$ void
+    }
+
+    PricingStrategy <|.. StandardPricingStrategy : implements
+    PricingStrategy <|.. DynamicPricingStrategy : implements
+    PricingStrategy <|.. MorningPricingStrategy : implements
+    PricingStrategy <|.. CorporatePricingStrategy : implements
+    PricingStrategy <|.. PremierePricingStrategy : implements
+
+    Session o--> "1" PricingStrategy : uses
+    Session ..> EventLogger : logs via
+    Task1 ..> Session : creates & configures
+    Task1 ..> PricingStrategy : creates
