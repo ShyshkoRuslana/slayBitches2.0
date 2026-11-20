@@ -1,0 +1,93 @@
+classDiagram
+    direction TB
+
+    class SessionIterator {
+        <<interface>>
+        <<Iterator>>
+        +hasNext() boolean
+        +next() Session
+    }
+
+    class CinemaSchedule {
+        <<ConcreteAggregate>>
+        -Map~String, Map~LocalDate, List~Session~~~ scheduleByHallAndDate
+        +addSession(session: Session) void
+        ~getAllSessionsInternal() List~Session~
+        +createChronologicalIterator(targetDate: LocalDate) SessionIterator
+        +createMovieIterator(movieTitle: String) SessionIterator
+        +createAvailableSeatsIterator() SessionIterator
+        +printInternalStructureSummary() void
+    }
+
+    class ChronologicalIterator {
+        <<ConcreteIterator>>
+        -List~Session~ filteredSessions
+        -int cursor
+        +ChronologicalIterator(schedule: CinemaSchedule, targetDate: LocalDate)
+        +hasNext() boolean
+        +next() Session
+    }
+
+    class MovieSessionIterator {
+        <<ConcreteIterator>>
+        -List~Session~ filteredSessions
+        -int cursor
+        +MovieSessionIterator(schedule: CinemaSchedule, movieTitle: String)
+        +hasNext() boolean
+        +next() Session
+    }
+
+    class AvailableSeatsIterator {
+        <<ConcreteIterator>>
+        -List~Session~ filteredSessions
+        -int cursor
+        +AvailableSeatsIterator(schedule: CinemaSchedule)
+        +hasNext() boolean
+        +next() Session
+    }
+
+    class Session {
+        <<Element>>
+        -String movieTitle
+        -String hallName
+        -LocalDate date
+        -LocalTime time
+        -int availableSeats
+        +Session(movieTitle: String, hallName: String, date: LocalDate, time: LocalTime, availableSeats: int)
+        +getMovieTitle() String
+        +getHallName() String
+        +getDate() LocalDate
+        +getTime() LocalTime
+        +getAvailableSeats() int
+        +toString() String
+    }
+
+    class EventLogger {
+        <<Utility>>
+        -int minutes$
+        +log(source: String, event: String)$ void
+    }
+
+    class Task1Runner {
+        <<Client>>
+        +runTask1()$ void
+        +main(args: String[])$ void
+    }
+
+    SessionIterator <|.. ChronologicalIterator : implements
+    SessionIterator <|.. MovieSessionIterator : implements
+    SessionIterator <|.. AvailableSeatsIterator : implements
+
+    CinemaSchedule "1" o--> "0..*" Session : stores
+    CinemaSchedule ..> ChronologicalIterator : creates
+    CinemaSchedule ..> MovieSessionIterator : creates
+    CinemaSchedule ..> AvailableSeatsIterator : creates
+    CinemaSchedule ..> EventLogger : logs via
+
+    ChronologicalIterator --> "1" CinemaSchedule : reads
+    MovieSessionIterator --> "1" CinemaSchedule : reads
+    AvailableSeatsIterator --> "1" CinemaSchedule : reads
+
+    Task1Runner ..> CinemaSchedule : uses
+    Task1Runner ..> SessionIterator : iterates via
+    Task1Runner ..> EventLogger : logs via
