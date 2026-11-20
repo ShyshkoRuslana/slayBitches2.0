@@ -1,0 +1,141 @@
+classDiagram
+    direction TB
+
+    class OrderItemVisitor {
+        <<interface>>
+        <<Visitor>>
+        +visit(ticket: TicketItem) void
+        +visit(drink: DrinkItem) void
+        +visit(popcorn: PopcornItem) void
+        +visit(glasses: Glasses3DItem) void
+        +visit(certificate: GiftCertificateItem) void
+    }
+
+    class OrderItem {
+        <<interface>>
+        <<Element>>
+        +accept(visitor: OrderItemVisitor) void
+        +getTitle() String
+        +getPrice() double
+    }
+
+    class TicketItem {
+        <<ConcreteElement>>
+        -String movieTitle
+        -String seat
+        -double price
+        +TicketItem(movieTitle: String, seat: String, price: double)
+        +accept(visitor: OrderItemVisitor) void
+        +getTitle() String
+        +getPrice() double
+    }
+
+    class DrinkItem {
+        <<ConcreteElement>>
+        -String name
+        -int volumeMl
+        -double price
+        +DrinkItem(name: String, volumeMl: int, price: double)
+        +accept(visitor: OrderItemVisitor) void
+        +getTitle() String
+        +getPrice() double
+    }
+
+    class PopcornItem {
+        <<ConcreteElement>>
+        -String flavor
+        -String size
+        -double price
+        +PopcornItem(flavor: String, size: String, price: double)
+        +accept(visitor: OrderItemVisitor) void
+        +getTitle() String
+        +getPrice() double
+    }
+
+    class Glasses3DItem {
+        <<ConcreteElement>>
+        -int quantity
+        -double pricePerUnit
+        +Glasses3DItem(quantity: int, pricePerUnit: double)
+        +accept(visitor: OrderItemVisitor) void
+        +getTitle() String
+        +getPrice() double
+    }
+
+    class GiftCertificateItem {
+        <<ConcreteElement>>
+        -String code
+        -double nominalValue
+        +GiftCertificateItem(code: String, nominalValue: double)
+        +getCode() String
+        +accept(visitor: OrderItemVisitor) void
+        +getTitle() String
+        +getPrice() double
+    }
+
+    class VatCalculationVisitor {
+        <<ConcreteVisitor>>
+        -double totalVat
+        +visit(ticket: TicketItem) void
+        +visit(drink: DrinkItem) void
+        +visit(popcorn: PopcornItem) void
+        +visit(glasses: Glasses3DItem) void
+        +visit(certificate: GiftCertificateItem) void
+        +getTotalVat() double
+    }
+
+    class BonusPointsVisitor {
+        <<ConcreteVisitor>>
+        -int totalBonusPoints
+        +visit(ticket: TicketItem) void
+        +visit(drink: DrinkItem) void
+        +visit(popcorn: PopcornItem) void
+        +visit(glasses: Glasses3DItem) void
+        +visit(certificate: GiftCertificateItem) void
+        +getTotalBonusPoints() int
+    }
+
+    class FiscalReceiptVisitor {
+        <<ConcreteVisitor>>
+        -List~String~ receiptLines
+        -double totalSum
+        +visit(ticket: TicketItem) void
+        +visit(drink: DrinkItem) void
+        +visit(popcorn: PopcornItem) void
+        +visit(glasses: Glasses3DItem) void
+        +visit(certificate: GiftCertificateItem) void
+        +printReceipt() void
+    }
+
+    class EventLogger {
+        <<Utility>>
+        -int minutes$
+        +log(source: String, event: String)$ void
+    }
+
+    class Task2Runner {
+        <<Client>>
+        +runTask2()$ void
+        +main(args: String[])$ void
+    }
+
+    OrderItem <|.. TicketItem : implements
+    OrderItem <|.. DrinkItem : implements
+    OrderItem <|.. PopcornItem : implements
+    OrderItem <|.. Glasses3DItem : implements
+    OrderItem <|.. GiftCertificateItem : implements
+
+    OrderItemVisitor <|.. VatCalculationVisitor : implements
+    OrderItemVisitor <|.. BonusPointsVisitor : implements
+    OrderItemVisitor <|.. FiscalReceiptVisitor : implements
+
+    OrderItem ..> OrderItemVisitor : accepts
+    OrderItemVisitor ..> TicketItem : visits
+    OrderItemVisitor ..> DrinkItem : visits
+    OrderItemVisitor ..> PopcornItem : visits
+    OrderItemVisitor ..> Glasses3DItem : visits
+    OrderItemVisitor ..> GiftCertificateItem : visits
+
+    Task2Runner ..> OrderItem : iterates over
+    Task2Runner ..> OrderItemVisitor : applies
+    Task2Runner ..> EventLogger : logs via
