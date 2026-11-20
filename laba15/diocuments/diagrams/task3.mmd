@@ -1,0 +1,52 @@
+classDiagram
+    direction TB
+
+    class MovieSession {
+        <<AbstractClass>>
+        -String movieTitle
+        -String sessionType
+        +MovieSession(String movieTitle, String sessionType)
+        +closeSession() void
+        -turnOnLights() void
+        -letViewersOut() void
+        -inspectHall() void
+        -cleanHall() void
+        -prepareForNextSession() void
+        -generateReport() void
+        #collectAdditionalItems() void
+        #prepareAdditionalComfort() void
+        #log(String message) void
+    }
+
+    class Session2D {
+        <<ConcreteClass>>
+        +Session2D(String movieTitle)
+    }
+
+    class Session3D {
+        <<ConcreteClass>>
+        +Session3D(String movieTitle)
+        #collectAdditionalItems() void
+    }
+
+    class SessionVIP {
+        <<ConcreteClass>>
+        +SessionVIP(String movieTitle)
+        #collectAdditionalItems() void
+        #prepareAdditionalComfort() void
+    }
+
+    class Main {
+        <<Client>>
+        +main(String[] args)$ void
+    }
+
+    MovieSession <|-- Session2D : успадковує
+    MovieSession <|-- Session3D : успадковує
+    MovieSession <|-- SessionVIP : успадковує
+    Main "1" ..> "1..*" MovieSession : закриває сеанси
+
+    note for MovieSession "Шаблонний метод: closeSession() [final]\nХуки (Hooks): collectAdditionalItems(), prepareAdditionalComfort()"
+    note for Session2D "Використовує базову поведінку без змін"
+    note for Session3D "Перевизначає хук збору 3D-окулярів"
+    note for SessionVIP "Перевизначає хуки збору посуду та заміни пледів"

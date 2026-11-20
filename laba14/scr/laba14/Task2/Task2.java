@@ -1,4 +1,7 @@
 package laba14.Task2;
+/*Проблема постійного опитування
+Жорстка зв'язаність
+ Observer*/
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +40,6 @@ class Session {
     }
 
     private void notifyObservers(EventType event, String details) {
-        // Копіюємо список перед обходом, щоб уникнути ConcurrentModificationException,
-        // якщо хтось із підписників вирішить відписатися прямо під час сповіщення
         for (Observer observer : new ArrayList<>(observers)) {
             observer.update(title, event, details);
         }

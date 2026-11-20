@@ -2,7 +2,7 @@ package laba13.task1.Task2;
 
 import java.util.ArrayList;
 import java.util.List;
-/*Крихкість коду
+/*
 Складна умовна логіка
 Ланцюжок обов'язків)*/
 // 1. Клас замовлення
@@ -155,5 +155,10 @@ public class Task2 {
         Order order3 = new Order(200.0, false, false, false, true);
         promoHandler.handle(order3);
         order3.printResult();
+
+        System.out.println("=== Сценарій 4: Додавання пенсіонера + студент  ===");
+        Order order4 = new Order(200.0, false, true, false, true);
+        promoHandler.handle(order4);
+        order4.printResult();
     }
 }
